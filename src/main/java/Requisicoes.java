@@ -3,7 +3,7 @@ import java.net.*;
 import java.io.IOException;
 import java.util.*;
 
-public class Streams{
+public class Requisicoes{
     public static void main(String[] args) throws IOException, InterruptedException {
         //Esse que vai criar e fazer as requisicoes http
         HttpClient client = HttpClient.newHttpClient();
