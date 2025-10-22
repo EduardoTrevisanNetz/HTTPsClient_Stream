@@ -1,0 +1,11 @@
+# Pastas de build do Gradle
+/build/
+/.gradle/
+
+# Gradle Wrapper
+gradlew.bat
+gradlew
+
+# Arquivos do IDE (opcional)
+.idea/
+*.iml
