@@ -1,6 +1,7 @@
 import java.net.http.*;
 import java.net.*;
 import java.io.IOException;
+import java.io.FileWriter;
 import java.util.*;
 
 public class Requisicoes{
@@ -26,5 +27,10 @@ public class Requisicoes{
             registros.add(response);
         }
         System.out.println(registros.size());
+
+        FileWriter fw = new FileWriter("registros.json");
+        for(HttpResponse<String> response: registros){
+            fw.write(response.body() + "\n");
+        }
     }
 }

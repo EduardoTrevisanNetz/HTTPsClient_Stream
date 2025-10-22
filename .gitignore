@@ -1,4 +1,4 @@
-# Pastas de build do Gradle
+[# Pastas de build do Gradle
 /build/
 /.gradle/
 
@@ -9,3 +9,6 @@ gradlew
 # Arquivos do IDE (opcional)
 .idea/
 *.iml
+
+#  Json que gera quando processa
+registros.json
