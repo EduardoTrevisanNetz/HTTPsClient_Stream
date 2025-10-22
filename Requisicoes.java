@@ -1,23 +1,30 @@
 import java.net.http.*;
 import java.net.*;
 import java.io.IOException;
+import java.util.*;
 
 public class Streams{
     public static void main(String[] args) throws IOException, InterruptedException {
         //Esse que vai criar e fazer as requisicoes http
         HttpClient client = HttpClient.newHttpClient();
-        // Essa é a requisicao
 
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://jsonplaceholder.typicode.com/posts/1"))
-                //se eu nao falo nada ja usa GET como padrao
-                .GET()
-                .build();
+        //lista de registros para guardar as respostas
+        List<HttpResponse<String>> registros = new ArrayList<>();
 
-        //HttpResponse significa a resposta que eu vou ter da minha requisição
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        for (int i = 0; i < 100; i++) {
+            // Essa é a requisicao
+            HttpRequest request = HttpRequest.newBuilder()
+                    // to fazendo uma request na uri (Uniform Resource Indentifier)
+                    // e juntando com o numero de id que vai ser o i do meu for
+                    .uri(URI.create("https://www.gamerpower.com/api/giveaway?id=" + i))
+                    //se eu nao falo nada ja usa GET como padrao
+                    .GET()
+                    .build();
 
-        System.out.println(response.statusCode());
-        System.out.println(response.body());
+            //HttpResponse significa a resposta que eu vou ter da minha requisição
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            registros.add(response);
+        }
+        System.out.println(registros.size());
     }
 }
