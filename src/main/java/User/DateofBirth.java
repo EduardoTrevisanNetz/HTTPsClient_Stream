@@ -2,7 +2,7 @@ package User;
 
 import java.util.Date;
 
-public class DateofBorn {
+public class DateofBirth {
     private Date date;
     private int age;
 
@@ -14,5 +14,5 @@ public class DateofBorn {
 
     @Override
     public String toString() {
-        return "Born in: " date +", " age + " years old";}
+        return  date +", " + age + " years old";}
 }

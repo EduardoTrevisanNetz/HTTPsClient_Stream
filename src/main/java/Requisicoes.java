@@ -1,8 +1,13 @@
+import User.User;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.time.Duration;
+import java.io.File;
 import java.net.http.*;
 import java.net.*;
 import java.io.IOException;
 import java.io.FileWriter;
 import java.util.*;
+import User.RespostaAPI;
 
 public class Requisicoes{
     public static void main(String[] args) throws IOException, InterruptedException {
@@ -12,25 +17,30 @@ public class Requisicoes{
         //lista de registros para guardar as respostas
         List<HttpResponse<String>> registros = new ArrayList<>();
 
-        for (int i = 0; i < 100; i++) {
-            // Essa é a requisicao
-            HttpRequest request = HttpRequest.newBuilder()
-                    // to fazendo uma request na uri (Uniform Resource Indentifier)
-                    // e juntando com o numero de id que vai ser o i do meu for
-                    .uri(URI.create("https://randomuser.me/api/?results=2"))
-                    //se eu nao falo nada ja usa GET como padrao
-                    .GET()
-                    .build();
+        // Essa é a requisicao qual a ordem que eu to mandando pra api
+        HttpRequest requisicao = HttpRequest.newBuilder()
+                // to fazendo uma request na uri (Uniform Resource Indentifier)
+                // e juntando com o numero de id que vai ser o i do meu for
+                .uri(URI.create("https://randomuser.me/api/?results=100"))
+                .timeout(Duration.ofSeconds(10))
+                //se eu nao falo nada ja usa GET como padrao
+                .GET()
+                .build();
 
-            //HttpResponse significa a resposta que eu vou ter da minha requisição
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            registros.add(response);
-        }
-        System.out.println(registros.size());
+        //HttpResponse significa a resposta que eu vou ter da minha requisição
+        HttpResponse<String> resposta = client.send(requisicao, HttpResponse.BodyHandlers.ofString());
 
-        FileWriter fw = new FileWriter("registros.json");
-        for(HttpResponse<String> response: registros){
-            fw.write(response.body() + "\n");
+        try (FileWriter file = new FileWriter("registros.json")) {
+            file.write(resposta.body());
         }
+        ObjectMapper mapper =  new  ObjectMapper();
+        RespostaAPI respostas = mapper.readValue(new File("registros.json"), RespostaAPI.class);
+        List<User> pessoas = respostas.getResults();
+
+        for (User user : pessoas) {
+            System.out.println(user);
+            System.out.println();
+        }
+
     }
 }

@@ -1,3 +1,5 @@
+package User;
+
 public class Street {
     private int number;
     private String name;
@@ -10,5 +12,5 @@ public class Street {
 
     @Override
     public String toString() {
-        return name  + " Street , " + number;}
+        return name  + " User.Street , " + number;}
 }

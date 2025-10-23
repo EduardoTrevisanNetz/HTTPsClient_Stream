@@ -1,3 +1,5 @@
+package User;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 
@@ -24,9 +26,9 @@ class Location {
 
     @Override
     public String toString() {
-        return  street + ",\nCity: "
-                + city + ",\nState: "
-                + state + ",\nCountry: "
+        return  street + ",\n          City: "
+                + city + ",\n          State: "
+                + state +",\n          Country: "
                 + country + " (" + postcode + ")";
     }
 }
