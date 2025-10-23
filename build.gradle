@@ -10,6 +10,10 @@ repositories {
     mavenCentral()
 }
 
+dependencies{
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.17.2")
+}
+
 application {
     mainClass = 'Requisicoes' // nome da classe que tem o main
 }

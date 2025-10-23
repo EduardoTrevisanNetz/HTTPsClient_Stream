@@ -17,7 +17,7 @@ public class Requisicoes{
             HttpRequest request = HttpRequest.newBuilder()
                     // to fazendo uma request na uri (Uniform Resource Indentifier)
                     // e juntando com o numero de id que vai ser o i do meu for
-                    .uri(URI.create("https://www.gamerpower.com/api/giveaway?id=" + i))
+                    .uri(URI.create("https://randomuser.me/api/?results=2"))
                     //se eu nao falo nada ja usa GET como padrao
                     .GET()
                     .build();
