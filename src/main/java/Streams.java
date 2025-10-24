@@ -4,37 +4,42 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Streams {
+    static List<User> users;
+
     //java obriga a tratar excessoes verificadas/conhecidas
     public static void main(String[] args) throws IOException {
-        ObjectMapper mapper =  new  ObjectMapper();
-        RespostaAPI respostas = mapper.readValue(new File("registros.json"), RespostaAPI.class);
-        List<User> pessoas = respostas.getResults();
+        ObjectMapper mapper = new ObjectMapper();
+        RespostaAPI answer = mapper.readValue(new File("registros.json"), RespostaAPI.class);
+        users = answer.getResults();
 
-        for (User user : pessoas) {
+        for (User user : users) {
             System.out.println(user);
             System.out.println();
         }
+
+        proporcaoGenero();
     }
 
     // Proporcao de genero (numero e estatistica);
-    public static int[] proporcaoGenero(List<User> pessoas){
+    public static void proporcaoGenero() {
         long[] x = new long[2];
-        x[0] = pessoas.stream()
+        x[0] = users.stream()
                 .filter(p -> p.getGender() == "male")
                 .count();
 
-        x[1] = pessoas.stream()
-                        .filter(p -> p.getGender() == "female")
-                        .count();
+        x[1] = users.stream()
+                .filter(p -> p.getGender() == "female")
+                .count();
 
-        System.out.println("Percentage males: "+ ((x[0]/pessoas.size()/100) + "%, amount: "+ x[0] +
-                            "\n Percentage females: "+ ((x[1]/pessoas.size()/100) + "%, amount"+ x[1]);
+        System.out.println("Percentage males: " + ((x[0] / users.size()) / 100) + "%, amount: " + x[0] +
+                "\n Percentage females: " + ((x[1] / users.size()) / 100) + "%, amount" + x[1]);
 
     }
-
+}
     //Retorna quais as diferentes idades, em ordem, qual a porcentagem que cada um ocupa, (filter, ordem, map(x -> x/pessoas.size())
 
     //Retorna nome das pessoas até ter uma que o nome n tem 'a' e qual foi o primeiro que nao deu match
@@ -52,4 +57,3 @@ public class Streams {
     //Retorna das pessoas de uma localidade quantas sao mulheres com faixa de idade 19-30
 
     //Retorna
-}
