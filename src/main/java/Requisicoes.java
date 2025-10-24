@@ -10,6 +10,7 @@ import java.util.*;
 import User.RespostaAPI;
 
 public class Requisicoes{
+    //java obriga a tratar excessoes verificadas/conhecidas
     public static void main(String[] args) throws IOException, InterruptedException {
         //Esse que vai criar e fazer as requisicoes http
         HttpClient client = HttpClient.newHttpClient();
@@ -33,14 +34,5 @@ public class Requisicoes{
         try (FileWriter file = new FileWriter("registros.json")) {
             file.write(resposta.body());
         }
-        ObjectMapper mapper =  new  ObjectMapper();
-        RespostaAPI respostas = mapper.readValue(new File("registros.json"), RespostaAPI.class);
-        List<User> pessoas = respostas.getResults();
-
-        for (User user : pessoas) {
-            System.out.println(user);
-            System.out.println();
-        }
-
     }
 }
