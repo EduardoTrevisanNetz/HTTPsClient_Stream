@@ -5,5 +5,6 @@ public class Main{
     public static void main(String[] args) throws IOException, InterruptedException {
         userService.setUsers("registros.json");
         userService.proporcaoGenero();
+        userService.diferentesIdades();
     }
 }

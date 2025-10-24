@@ -5,7 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class UserService {
     private List<User> users;
@@ -13,11 +15,13 @@ public class UserService {
 
 
     //ja cria um servico de request automatico
-    public UserService(){ this.requests = new Requests(); }
+    public UserService() {
+        this.requests = new Requests();
+    }
 
     //aqui vai setar os users
     //tenho que botar as mesmas excessoes que o outro metodo importa
-    public void setUsers(String paths)throws IOException, InterruptedException {
+    public void setUsers(String paths) throws IOException, InterruptedException {
         //faz request para criar json
         String path = requests.requestJson(paths);
 
@@ -45,13 +49,25 @@ public class UserService {
         x1[0] = (double) x[0];
         x1[1] = (double) x[1];
 
-        System.out.println("Percentage males: " + ((x1[0] / users.size()) * 100) + "%, amount: " + x1[0] +
-                "\n Percentage females: " + ((x1[1] / users.size()) * 100) + "%, amount" + x1[1]);
+        System.out.println("Percentage males: " + ((x1[0] / users.size()) * 100) + "%, amount: " + x[0] +
+                "\n Percentage females: " + ((x1[1] / users.size()) * 100) + "%, amount" + x[1]);
 
     }
-}
-    //Retorna quais as diferentes idades, em ordem, qual a porcentagem que cada um ocupa, (filter, ordem, map(x -> x/pessoas.size())
 
+    //Retorna quais as diferentes idades, em ordem, qual a porcentagem que cada um ocupa, (filter, ordem, map(x -> x/pessoas.size())
+    public void diferentesIdades() {
+        List<Integer> x = this.users.stream()
+                .map(p -> p.getDob().getAge())
+                .distinct()
+                .sorted()
+                //coleta os resultados da stream e coloca em uma lista
+                .collect(Collectors.toList());
+
+        for(Integer idade : x){
+            System.out.print(idade + " . ");
+        }
+
+    }
     //Retorna nome das pessoas até ter uma que o nome n tem 'a' e qual foi o primeiro que nao deu match
 
     //Retorna a primeira pessoa que morar no Brazil
@@ -67,3 +83,4 @@ public class UserService {
     //Retorna das pessoas de uma localidade quantas sao mulheres com faixa de idade 19-30
 
     //Retorna
+}
