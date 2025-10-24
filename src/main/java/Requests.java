@@ -12,16 +12,27 @@ import User.RespostaAPI;
 
 //tirar da main as coisas e ter metodos só pra requests
 public class Requests {
-    //java obriga a tratar excessoes verificadas/conhecidas
-    public static void main(String[] args) throws IOException, InterruptedException {
-        //Esse que vai criar e fazer as requisicoes http
-        HttpClient client = HttpClient.newHttpClient();
+    private static final String url = "https://randomuser.me/";
+    private static final int urlInput = 100;
+    //Esse que vai criar e fazer as requisicoes http
+    private static final HttpClient client = HttpClient.newHttpClient();
 
+    public static String requestJson(String paths) throws IOException, InterruptedException {
+        String res = requestString();
+        String path = paths;
+        try (FileWriter file = new FileWriter(path)) {
+            file.write(res);
+        }
+
+        return path;
+    }
+
+    public static String requestString() throws IOException, InterruptedException {
         // Essa é a requisicao qual a ordem que eu to mandando pra api
         HttpRequest request = HttpRequest.newBuilder()
                 // to fazendo uma request na uri (Uniform Resource Indentifier)
                 // e juntando com o numero de id que vai ser o i do meu for
-                .uri(URI.create("https://randomuser.me/api/?results=100"))
+                .uri(URI.create(url + "api/?results=" + urlInput))
                 //se eu nao falo nada ja usa GET como padrao
                 .GET()
                 .build();
@@ -29,8 +40,6 @@ public class Requests {
         //HttpResponse significa a resposta que eu vou ter da minha requisição
         HttpResponse<String> res = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        try (FileWriter file = new FileWriter("registros.json")) {
-            file.write(res.body());
-        }
+        return res.body();
     }
 }

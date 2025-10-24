@@ -19,4 +19,4 @@ dependencies {
     testCompileOnly 'org.projectlombok:lombok:1.18.32'
 }
 
-mainClassName = 'Requests'
+mainClassName = 'Main'
