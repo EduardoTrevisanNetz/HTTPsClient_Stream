@@ -23,7 +23,7 @@ public class UserService {
     //tenho que botar as mesmas excessoes que o outro metodo importa
     public void setUsers(String paths) throws IOException, InterruptedException {
         //faz request para criar json
-        String path = requests.requestJson(paths);
+        String path = requests.request(RequestConfig.SALVAR_JSON);
 
         //desserializa e passa para objeto
         ObjectMapper objectMapper = new ObjectMapper();
@@ -35,7 +35,7 @@ public class UserService {
 
 
     // Proporcao de genero (numero e estatistica);
-    public void proporcaoGenero() {
+    private void proporcaoGenero() {
         long[] x = new long[2];
         x[0] = this.users.stream()
                 .filter(p -> p.getGender().equals("male"))
@@ -55,7 +55,7 @@ public class UserService {
     }
 
     //Retorna quais as diferentes idades, em ordem, qual a porcentagem que cada um ocupa, (filter, ordem, map(x -> x/pessoas.size())
-    public void diferentesIdades() {
+    private void diferentesIdades() {
         List<Integer> x = this.users.stream()
                 .map(p -> p.getDob().getAge())
                 .distinct()

@@ -18,23 +18,24 @@ public class Requests {
     //Esse que vai criar e fazer as requisicoes http
     private static HttpClient client = HttpClient.newHttpClient();
 
-    public static String requestJson(String paths) throws IOException, InterruptedException {
+    //esconder os metodos que fazem algo do externo, responsabilidade unica
+    public String request(RequestConfig config)throws  IOException, InterruptedException {
+        String dados = requestString();
 
-        String res = requestString();
-        String path = paths;
-        try (FileWriter file = new FileWriter(path)) {
-            file.write(res);
+        switch (config){
+            case N_SALVAR:
+                return dados;
+            case SALVAR_JSON:
+                return requestJson(dados, "requests");
+            case SALVAR_CSV:
+                return requestCsv(dados, "requests");
+            case SALVAR_TXT:
+                return requestTxt(dados, "requests");
         }
-
-        return path;
+        return "Especificar a request";
     }
 
-//    public Object request(String responseType)
-//
-//
-//    privt
-
-    public static String requestString() throws IOException, InterruptedException {
+    private String requestString() throws IOException, InterruptedException {
         // Essa é a requisicao qual a ordem que eu to mandando pra api
         HttpRequest request = HttpRequest.newBuilder()
                 // to fazendo uma request na uri (Uniform Resource Indentifier)
@@ -48,5 +49,29 @@ public class Requests {
         HttpResponse<String> res = client.send(request, HttpResponse.BodyHandlers.ofString());
 
         return res.body();
+    }
+
+    private String requestJson(String dados, String path) throws IOException, InterruptedException {
+        try (FileWriter file = new FileWriter(path + ".json")) {
+            file.write(dados);
+        }
+
+        return path + ".json";
+    }
+
+    private String requestCsv(String dados, String path) throws IOException, InterruptedException {
+        try (FileWriter file = new FileWriter(path + ".csv")) {
+            file.write(dados);
+        }
+
+        return path + ".csv";
+    }
+
+    private String requestTxt(String dados, String path) throws IOException, InterruptedException {
+        try (FileWriter file = new FileWriter(path + ".txt")) {
+            file.write(dados);
+        }
+
+        return path + ".txt";
     }
 }
