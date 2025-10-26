@@ -1,20 +1,14 @@
-import User.User;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.time.Duration;
-import java.io.File;
 import java.net.http.*;
 import java.net.*;
 import java.io.IOException;
 import java.io.FileWriter;
-import java.util.*;
-import User.RespostaAPI;
 
 // fazer metodo request chamar outros requests privados
 //cada request ser independente e poder passar url e pa
 //tirar da main as coisas e ter metodos só pra requests
 public class Requests {
     private static final String url = "https://randomuser.me/";
-    private static final int urlInput = 2500;
+    private static final int urlInput = 1000;
     //Esse que vai criar e fazer as requisicoes http
     private static HttpClient client = HttpClient.newHttpClient();
 

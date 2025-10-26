@@ -1,11 +1,11 @@
-package User;
+package Model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-class Location {
+public class Location {
     private Street street;
     private String city;
     private String state;

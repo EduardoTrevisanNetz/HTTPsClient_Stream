@@ -10,5 +10,7 @@ gradlew
 .idea/
 *.iml
 
-#  Json que gera quando processa
-registros.json
+# tipos de arquivo que o requests gera
+.json
+.csv
+.txt
