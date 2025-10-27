@@ -16,17 +16,12 @@ public class Requests {
     public String request(RequestConfig config)throws  IOException, InterruptedException {
         String dados = requestString();
 
-        switch (config){
-            case N_SALVAR:
-                return dados;
-            case SALVAR_JSON:
-                return requestJson(dados, "requests");
-            case SALVAR_CSV:
-                return requestCsv(dados, "requests");
-            case SALVAR_TXT:
-                return requestTxt(dados, "requests");
-        }
-        return "Especificar a request";
+        return switch (config){
+            case N_SALVAR -> dados;
+            case SALVAR_JSON -> requestJson(dados, "requests");
+            case SALVAR_CSV -> requestCsv(dados, "requests");
+            case SALVAR_TXT -> requestTxt(dados, "requests");
+        };
     }
 
     private String requestString() throws IOException, InterruptedException {

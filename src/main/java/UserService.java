@@ -33,7 +33,7 @@ public class UserService {
 
 
     // Proporcao de genero (numero e estatistica);
-    public void genderProportion() {
+    public long[] genderNumber() {
         long[] x = new long[2];
         x[0] = this.users.stream()
                 .filter(p -> p.getGender().equals("male"))
@@ -43,17 +43,18 @@ public class UserService {
                 .filter(p -> p.getGender().equals("female"))
                 .count();
 
-        double[] x1 = new double[2];
-        x1[0] = (double) x[0];
-        x1[1] = (double) x[1];
+        return x;
+    }
+    public double[] genderPercentage(long[] numberPerGender){
+        double[] percentages = new double[2];
+        percentages[0] = (double)  ((numberPerGender[0]*100.0)/ users.size());
+        percentages[1] = (double)  ((numberPerGender[1]*100.0)/ users.size());
 
-        System.out.println("Percentage males: " + ((x1[0] / users.size()) * 100) + "%, amount: " + x[0] +
-                "\n Percentage females: " + ((x1[1] / users.size()) * 100) + "%, amount: " + x[1]);
-
+        return percentages;
     }
 
     //Retorna quais as diferentes idades, em ordem, qual a porcentagem que cada um ocupa, (filter, ordem, map(x -> x/pessoas.size())
-    public void diferentAges() {
+    public Map<Integer, Long> DiferentAges() {
         //estou mapeando idades unicas para quantas vezes aparecem
         Map<Integer, Long> x = this.users.stream()
                 //transforma uma stream de users para uma stream de idades
@@ -65,41 +66,44 @@ public class UserService {
                         //conta quantas vezes cada idade aparece
                         Collectors.counting()
                 ));
-        // para cada entrada chave e valou no meu conjunto de pares faca algo
-        for(Map.Entry<Integer,Long> entry : x.entrySet()){
-            double porcentagem = ((entry.getValue()*100.0)/ users.size());
-            System.out.print("Age: " + entry.getKey() + ", frequency: "+ porcentagem + "%\n");
-        }
+        return x;
     }
+    public List<Double> AgesPercentage(Map<Integer, Long> agesQuantity){
+        List<Double> percentages = new ArrayList<>();
+        for(Map.Entry<Integer,Long> entry : agesQuantity.entrySet()){
+            double percentage = ((entry.getValue()*100.0)/ users.size());
+            percentages.add(percentage);
+        }
+        return percentages;
+    }
+
+
     //Retorna nome das pessoas até ter uma que o nome n tem 'a' e qual foi o primeiro que nao deu match
-    public void firstNoAName(){
+    public List<String> untilAName(){
         List<String> names = this.users.stream()
                 .map(user -> user.getName().getFirst())
                 .takeWhile(name -> name.contains("a"))
                 .collect(Collectors.toList());
+        return names;
+    }
 
-        Optional noAName = this.users.stream()
+    public Optional firstNoAName(){
+        Optional firstNoA = this.users.stream()
                 .map(user -> user.getName().getFirst())
                 .filter(name -> !name.contains("a"))
                 .findFirst();
-
-        for(String name : names){
-            System.out.println(name);
-        }
-        //usar o get "desembrulha o valor contido no optional"
-        System.out.println("No a name: " + noAName.get());
+        return firstNoA;
     }
     //Retorna a primeira pessoa que morar no Brazil
-    public void livesInBrazil(){
+    public Optional firstBrazilian(){
         Optional brazilian = this.users.stream()
                 .filter(userCountry -> userCountry.getLocation().getCountry().equals("Brazil"))
                 .findFirst();
-
-        System.out.println("First brazilian: " + brazilian.get());
+        return brazilian;
     }
     //Retorna 5 mais novos e 5 mais velhos
 
-    public void oldTier(){
+    public User[] oldTier(){
         User[] oldest = this.users.stream()
                 //com .reverseOrder so funcionaria se user implementasse comparable
                 //.sorted(Comparator.reverseOrder())
@@ -115,79 +119,58 @@ public class UserService {
                 .toArray(User[]::new);
                 //mudei o nome da pasta pois o compilador nao sabia se era o package User ou a classe
 
+        return oldest;
+    }
+
+    public User[] newTier(){
         User[] newest = this.users.stream()
                 .sorted(Comparator.<User, Date>comparing(u -> u.getDob().getDate()).reversed())
                 .limit(5)
                 .toArray(User[]::new);
 
-        System.out.println("Top 5 oldest users");
-        for(User u : oldest) {
-            System.out.println(u.getName() + " Birth: " + u.getDob());
-        }
-
-        System.out.println("\nTop 5 newest users");
-        for(User u : newest){
-            System.out.println(u.getName()+ " Birth: " + u.getDob());
-
-        }
-
+        return newest;
     }
 
     //Retorna todos os nomes que se repetem
-    public void mostCommomNames(){
+    public Map<String, Long> mostCommomNames(){
         Map<String, Long> commom =  this.users.stream()
                 .map(u -> u.getName().getFirst())
                 .collect(Collectors.groupingBy(
                         name -> name,
                         Collectors.counting()
                 ));
-        for(Map.Entry<String, Long> entry : commom.entrySet()){
-            if(entry.getValue() > 3){
-                System.out.println("The name "+entry.getKey() + " appears " + entry.getValue() + " times");
-            }
-        }
+      return commom;
     }
 
     //Retorna apenas os brasileiros nascidos apos anos 2000
-    public void brazilianGenZ(){
-        List<User> Genz = this.users.stream()
+    public List<User> brazilianGenZ(){
+        List<User> genZ = this.users.stream()
                 .filter(u -> u.getLocation().getCountry().equals("Brazil"))
                 //pega apenas a partir de 1900
                 .filter(u -> u.getDob().getDate().getYear() >= 100)
                 .collect(Collectors.toList());
 
-        System.out.println("Brazilian gen z");
-        for(User u : Genz){
-            System.out.println(u.getName() + " Birth: " + u.getDob());
-        }
+       return genZ;
     }
 
     //Retorna quantos homens entre 18 e 25 anos e qual a proporcao deles no todo
-    public void maleAgeGroup(){
-        List<User> male = this.users.stream()
+    public List<User> maleAgeGroup(){
+        List<User> maleGroup = this.users.stream()
                 .filter(u -> u.getGender().equals("female"))
                 .filter(u -> u.getDob().getAge()>= 18 && u.getDob().getAge()<=25)
                 .collect(Collectors.toList());
 
-        double totalMales = (double) this.users.stream()
-                        .filter(u -> u.getGender().equals("male"))
-                        .count();
-        System.out.println("Male in this age group: " + male.size());
-        System.out.println("That means " + String.format("%.2f",((male.size()*100.0)/totalMales)) +"% of total male users");
+        return maleGroup;
     }
 
     //Retorna das pessoas de uma localidade quantas sao mulheres com faixa de idade 19-30
-    public void womanAgeLocality(String Country){
+    public List<User> womanAgeLocality(String Country) {
         List<User> womans = this.users.stream()
                 .filter(u -> u.getLocation().getCountry().equals(Country))
                 .filter(u -> u.getGender().equals("female"))
-                .filter(u -> u.getDob().getAge()>= 19 && u.getDob().getAge()<=30)
+                .filter(u -> u.getDob().getAge() >= 19 && u.getDob().getAge() <= 30)
                 .collect(Collectors.toList());
 
-        double numberOfWomans = (double) this.users.stream()
-                .filter(u -> u.getGender().equals("female"))
-                .count();
-        System.out.println("Woman age locality: " + womans.size());
-        System.out.println("That means " + String.format("%.2f",(womans.size()*100.0)/numberOfWomans) +"% of total woman users");
+        return womans;
     }
 }
