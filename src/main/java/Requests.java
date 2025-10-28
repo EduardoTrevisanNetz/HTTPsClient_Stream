@@ -21,12 +21,23 @@ public class Requests {
     public String request(RequestConfig config)throws  IOException, InterruptedException {
         String dados = requestString();
 
-        return switch (config){
-            case N_SALVAR -> dados;
-            case SALVAR_JSON -> requestSaver.Save(dados, archivePath, ".json");
-            case SALVAR_CSV ->  requestSaver.Save(dados, archivePath, ".csv");
-            case SALVAR_TXT ->  requestSaver.Save(dados, archivePath, ".txt");
-        };
+        switch (config) {
+            case N_SALVAR:
+                return dados;
+            case SALVAR_JSON:
+                requestSaver.Save(dados, archivePath, ".json");
+                break;
+            case SALVAR_CSV:
+                requestSaver.Save(dados, archivePath, ".csv");
+                break;
+            case SALVAR_TXT:
+                requestSaver.Save(dados, archivePath, ".txt");
+                break;
+            default:
+                // Caso de fallback (se necessário)
+                throw new IllegalArgumentException("Configuração desconhecida");
+        }
+        return null;
     }
 
     private String requestString() throws IOException, InterruptedException {

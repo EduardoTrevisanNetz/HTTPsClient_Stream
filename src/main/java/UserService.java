@@ -54,7 +54,7 @@ public class UserService {
     }
 
     //Retorna quais as diferentes idades, em ordem, qual a porcentagem que cada um ocupa, (filter, ordem, map(x -> x/pessoas.size())
-    public Map<Integer, Long> DiferentAges() {
+    public Map<Integer, Long> diferentAges() {
         //estou mapeando idades unicas para quantas vezes aparecem
         Map<Integer, Long> x = this.users.stream()
                 //transforma uma stream de users para uma stream de idades
@@ -68,7 +68,7 @@ public class UserService {
                 ));
         return x;
     }
-    public List<Double> AgesPercentage(Map<Integer, Long> agesQuantity){
+    public List<Double> agesPercentage(Map<Integer, Long> agesQuantity){
         List<Double> percentages = new ArrayList<>();
         for(Map.Entry<Integer,Long> entry : agesQuantity.entrySet()){
             double percentage = ((entry.getValue()*100.0)/ users.size());
@@ -87,19 +87,17 @@ public class UserService {
         return names;
     }
 
-    public Optional firstNoAName(){
-        Optional firstNoA = this.users.stream()
+    public Optional<String> firstNoAName(){
+        return this.users.stream()
                 .map(user -> user.getName().getFirst())
                 .filter(name -> !name.contains("a"))
                 .findFirst();
-        return firstNoA;
     }
     //Retorna a primeira pessoa que morar no Brazil
-    public Optional firstBrazilian(){
-        Optional brazilian = this.users.stream()
+    public Optional<User> firstBrazilian(){
+        return this.users.stream()
                 .filter(userCountry -> userCountry.getLocation().getCountry().equals("Brazil"))
                 .findFirst();
-        return brazilian;
     }
     //Retorna 5 mais novos e 5 mais velhos
 

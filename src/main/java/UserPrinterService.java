@@ -8,6 +8,7 @@ import java.util.concurrent.ExecutionException;
 
 public class UserPrinterService {
     private UserService userService;
+
     public UserPrinterService()throws IOException, InterruptedException{
         this.userService = new UserService();
         userService.setUsers();
